@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2e2e2e; /* Dark grey background */
+            color: #f4f4f4; /* Light text for contrast */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #ff9800; /* Orange for headings */
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #3e3e3e; /* Slightly lighter grey for table */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #4caf50; /* Green header */
+            color: #fff;
+            text-align: left;
+            padding: 15px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555; /* Subtle border for rows */
+            color: #f4f4f4;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Button Styles */
+        button {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for scaling */
+        }
+        
+        button:hover {
+            transform: scale(1.1); /* Increase size to 110% on hover */
+        }
+        
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c; /* Red for delete */
+            color: white;
+            margin-left: 25px;
+        }
+
+        .edit-btn {
+            background-color: #676046; /* Yellow for edit */
+            color: white;
+        }
+        #filter-btn {
+            background-color: #192019; /* Set the initial background color */
+            color: white; /* Set the text color */
+            padding: 10px 20px; /* Add some padding for better click area */
+            border: none; /* Remove default border */
+            border-radius: 5px; /* Rounded corners for the button */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            transition: all 0.3s ease; /* Smooth transition for all properties */
+        }
+        
+        #filter-btn:hover {
+            transform: scale(1.05); /* Slightly enlarge the button on hover */
+            background-color: #1f261f; /* Change the background color on hover */
+        }
+        
+        .show-btn {
+            display: block;
+            margin: 0 auto 20px auto;
+            background-color: #192019; /* Green button */
+            color: white;
+        }
+
+        /* Form Styles */
+        form {
+            background-color: #3e3e3e; /* Same grey as the table */
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #cfa463; /* Orange for labels */
+        }
+        #add-btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #192019;
+            transition: transform 0.3s ease; /* Smooth transition for scaling */
+        }
+        
+        #add-btn:hover {
+            transform: scale(1.05); /* Increase size to 105% on hover */
+        }
+        
+        form input, form select, form textarea, form button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #555; /* Subtle border for inputs */
+            border-radius: 5px;
+            background-color: #2e2e2e; /* Dark grey input background */
+            color: #f4f4f4;
+            transition: border-color 0.3s ease;
+        }
+
+        form input:focus, form select:focus, form textarea:focus {
+            border-color: #5b7b5b; /* Green focus effect */
+            outline: none;
+        }
+
+        form button {
+            background-color: #3f5340; /* Green button */
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px;
+        }
+
+        form button:hover {
+            background-color: #45a049; /* Slightly darker green on hover */
+        }
+
+        .tb {
+            background-color: #2f2f2f; /* Greyish black background */
+            color: white; /* Set text color to white for contrast */
+            border-collapse: collapse; /* Collapse borders for a cleaner look */
+            width: 100%; /* Make the table take up full width */
+        }
+        
+        .tb th, .tb td {
+            padding: 12px; /* Add padding for better readability */
+            text-align: left; /* Align text to the left */
+            border-bottom: 1px solid #555; /* Add a subtle border for rows */
+        }
+        
+        .tb th {
+            background-color: #1f1f1f; /* Darker greyish black for header */
+        }
+        
+        .tb tr:hover {
+            background-color: #444444; /* Highlight row on hover */
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+    <div>
+        <h2>Filter Expenses</h2>
+        <form id="filter-form">
+            <label for="filter-category">Category:</label>
+            <select id="filter-category">
+                <option value="">All Categories</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+            </select>
+    
+            
+    
+            <button type="button" id="filter-btn">Apply Filters</button>
+        </form>
+    </div>
+
+    <br>
+
+    <table class="tb">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="expense-table-body">
+            <!-- Expenses will be dynamically added here -->
+        </tbody>
+    </table>
+<br>
+<button class="show-btn" id="show-all-btn">Show All Expenses</button>
+<br>
+    <div>
+        <h2>Add/Edit Expense</h2>
+        <form id="expense-form">
+            <label for="category-select">Category:</label>
+            <select id="category-select" required>
+                <option value="">Select a category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+            </select>
+
+            <label for="amount-input">Amount:</label>
+            <input type="number" id="amount-input" required>
+
+            <label for="date-input">Date:</label>
+            <input type="date" id="date-input" required>
+
+            <label for="description-input">Description:</label>
+            <textarea id="description-input" rows="3"></textarea>
+
+            <button type="button" id="add-btn">Add</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
